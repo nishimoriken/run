@@ -5,21 +5,21 @@ use lib qw(./);
 require "runall_util.pl";
 $| = 1;
 
-# Time-stamp: <2025-12-12 16:29:22 nishimoriken>
+# Time-stamp: <2025-12-12 23:42:16 nishimoriken>
 
 ##########################################################################
 # edit
 ##########################################################################
 
 ### Timeout (sec.)
-my $timeout = 10;
+#my $timeout = 10;
 #my $timeout = 60;
 #my $timeout = 3*60;
 #my $timeout = 5*60;
 #my $timeout = 10*60;
 #my $timeout = 15*60;
 #my $timeout = 16*60;
-#my $timeout = 30*60;
+my $timeout = 30*60;
 #my $timeout = 1*60*60;
 #my $timeout = 2*60*60;
 #my $timeout = 3*60*60;
@@ -34,7 +34,7 @@ my %solver = ();
 $solver{"none"}     = "gtime -v gtimeout $timeout";
 
 ### Bound
-my $bound = "100";
+my $bound = "2000";
 
 ### Others
 my $date  = "/bin/date";
