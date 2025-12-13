@@ -1,0 +1,46 @@
+## Finderで開くと自動的に作られるファイル (Mac)
+.DS_store
+
+## LaTeX 中間生成ファイル
+/**/auto/
+*.dvi
+*.aux
+*.nav
+*.out
+*.snm
+*.toc
+*.bbl
+*.blg
+*.lol
+*.lot
+*.lof
+*.log
+*.vrb
+*.idx
+*.ilg
+*.ind
+*.pdf
+
+# Python キャッシュ
+__pycache__/
+
+## タイプセット時に必要な実行ログ XXX.log を置く場合は
+## code ディレクトリ以下に置いてトラッキング対象にしてください
+!/**/code/*.log
+
+## 参考文献用
+!/**/reference/*.pdf
+
+## emacs オートセーブ
+*.*~
+#*.*#
+
+## 論文用ライセンス
+!/**/copyright/*.pdf
+!/**/camera_ready/camera_ready.pdf
+!/**/evidence/*.pdf
+!/**/pdf/*.pdf
+!/**/apc/*.pdf
+
+## arXiv
+!/**/arXiv/*.bbl
