@@ -115,7 +115,9 @@ sub solve {
 sub run {
     my ($col1, $col2, $enc, $slv, $log) = @_;
     my $cmd2 = join(" ", ($solver{$slv}, $encoding{$enc}, $col1, $col2));
-    print "$cmd2\n";
+    my $full_cmd = "$cmd_core > $log 2>&1";
+    print "Running: $full_cmd\n"
+    # print "$cmd2\n";
     if ($opt_n) {
 	return;
     }
@@ -140,7 +142,7 @@ sub run {
     # }
     # close(CMD);
     # close(LOG);
-    system("$cmd2 > $log 2>&1");
+    system($full_cmd);
 }
 
 sub exec {
