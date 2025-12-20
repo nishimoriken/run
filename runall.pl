@@ -5,21 +5,21 @@ use lib qw(./);
 require "runall_util.pl";
 $| = 1;
 
-# Time-stamp: <2025-12-12 23:42:16 nishimoriken>
+# Time-stamp: <2025-12-20 17:38:56 nishimoriken>
 
 ##########################################################################
 # edit
 ##########################################################################
 
 ### Timeout (sec.)
-#my $timeout = 10;
+my $timeout = 10;
 #my $timeout = 60;
 #my $timeout = 3*60;
 #my $timeout = 5*60;
 #my $timeout = 10*60;
 #my $timeout = 15*60;
 #my $timeout = 16*60;
-my $timeout = 30*60;
+#my $timeout = 30*60;
 #my $timeout = 1*60*60;
 #my $timeout = 2*60*60;
 #my $timeout = 3*60*60;
@@ -27,14 +27,14 @@ my $timeout = 30*60;
 
 ### ASP encoding
 my %encoding = ();
-$encoding{"cfb"}  = "./target/release/cfb";
+#$encoding{"basin"} = "-basin";
+#$encoding{"basin2"} = "-basin2";
+$encoding{"basin3"} = "-basin3";
 
 ### Solver
 my %solver = ();
-$solver{"none"}     = "gtime -v gtimeout $timeout";
+$solver{"bn"} = "gtime -v gtimeout $timeout ./target/release/bn4rust";
 
-### Bound
-my $bound = "2000";
 
 ### Others
 my $date  = "/bin/date";
@@ -89,8 +89,8 @@ exit 0;
 
 sub solve {
     my ($p, $enc, $slv) = @_;
-    my ($problem, $col) = @{$p};
-    my $log = &make_file_name($log_dir, $problem, $enc, $slv, $bound) . ".log";
+    my ($problem, $col1, $col2) = @{$p};
+    my $log = &make_file_name($log_dir, $problem, $enc, $slv) . ".log";
     my $id  = join(" ", ($problem, $enc, $slv));
     my $skip = 0;
     if (-e $log) {
@@ -110,39 +110,42 @@ sub solve {
 	next;
     }
     print "BEGIN $id [", scalar(localtime), "]\n";
-    &run($col, $enc, $slv, $log);
+    &run($col1, $col2, $enc, $slv, $log);
     print "END $id [", scalar(localtime), "]\n";
     print "\n";
 }
 
 sub run {
-    my ($col, $enc, $slv, $log) = @_;
-    my $cmd2 = join(" ", ($solver{$slv}, $encoding{$enc}, $col, $bound));
-    print "$cmd2\n";
+    my ($col1, $col2, $enc, $slv, $log) = @_;
+    my $cmd2 = join(" ", ($solver{$slv}, $encoding{$enc}, $col2, $col1));
+    my $full_cmd = "$cmd2 > $log 2>&1 < /dev/null";
+    print "Running $full_cmd\n";
+    # print "$cmd2\n";
     if ($opt_n) {
 	return;
     }
-    open(LOG, ">$log") || die("$!");
-    my $old = select; select(LOG); $| = 1; select($old);
-    open(CMD, "$cmd2 2>&1 |") || die;
-    while (<CMD>) {
-	print LOG $_;
-	if (/^(\d+)/) {
-	    print $1."\n";
-	} elsif (/^Command exited/) {
-	    print $_;
-	} elsif (/User time/) {
-	    print $_;
-	} elsif (/System time/) {
-	    print $_;
-	} elsif (/Elapsed/) {
-	    print $_;
-	} elsif (/\*\*\*/) {
-	    print $_;
-	}
-    }
-    close(CMD);
-    close(LOG);
+    # open(LOG, ">$log") || die("$!");
+    # my $old = select; select(LOG); $| = 1; select($old);
+    # open(CMD, "$cmd2 2>&1 |") || die;
+    # while (<CMD>) {
+	# print LOG $_;
+	# if (/^(\d+)/) {
+	#     print $1."\n";
+	# } elsif (/^Command exited/) {
+	#     print $_;
+	# } elsif (/User time/) {
+	#     print $_;
+	# } elsif (/System time/) {
+	#     print $_;
+	# } elsif (/Elapsed/) {
+	#     print $_;
+	# } elsif (/\*\*\*/) {
+	#     print $_;
+	# }
+    # }
+    # close(CMD);
+    # close(LOG);
+    system($full_cmd);
 }
 
 sub exec {
